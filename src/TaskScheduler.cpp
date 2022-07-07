@@ -20,8 +20,10 @@ void TaskScheduler::addTask(std::shared_ptr<Task> task, int delayMs, bool repeat
   //TODO: implement deleysMs handling 
   //TODO: implement repeatable handling 
   initWorkers();
-  std::unique_lock<std::mutex> lock(_locker);
-  _tasksQueue.push_back(task);
+  {
+    std::unique_lock<std::mutex> lock(_locker);
+    _tasksQueue.push_back(task);
+  }
   _conditionVriable.notify_one();
 }
 
