@@ -1,22 +1,13 @@
 #include "TaskScheduler.hpp"
-#include <chrono>
+#include "TimeHelper.hpp"
+
 #include <iostream>
 #include <functional>
 
-using TimeDuration = std::chrono::microseconds;
-using Clock = std::chrono::high_resolution_clock;
-using TimePoint = std::chrono::time_point<Clock, TimeDuration>;
-
-TimePoint GetNow()
+void WorkFor(Time::Duration duration)
 {
-  return std::chrono::time_point_cast<TimeDuration>(Clock::now());
-}
-
-
-void WorkFor(TimeDuration duration)
-{
-  TimePoint startTime = GetNow();
-  do; while (GetNow() - startTime < duration);
+  Time::Point startTime = Time::Now();
+  do; while (Time::Now() - startTime < duration);
 }
 
 class FunctionTask : public Task
