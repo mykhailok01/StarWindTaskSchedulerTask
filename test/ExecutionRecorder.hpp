@@ -6,6 +6,7 @@
 #include <mutex>
 #include <vector>
 #include <optional>
+#include <ostream>
 
 class Record final
 {
@@ -25,6 +26,8 @@ private:
   std::string _description;
 };
 
+std::ostream &operator<<(std::ostream &os, const Record &record);
+
 class ExecutionRecorder final
 {
 public:
@@ -37,5 +40,7 @@ private:
   mutable std::mutex _locker;
   std::vector<Record> _records;
 };
+
+std::ostream &operator<<(std::ostream &os, const ExecutionRecorder &recorder);
 
 #endif

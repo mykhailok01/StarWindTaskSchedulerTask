@@ -3,6 +3,7 @@
 
 #include <algorithm>
 #include <optional>
+#include <format>
 
 Record::Record(IdType id, const std::string &description) :
   _id{ id },
@@ -39,6 +40,7 @@ std::size_t ExecutionRecorder::getRecordsCount() const
 
 bool ExecutionRecorder::waitUnit(size_t recordCount, std::optional<Time::Duration> timeout) const
 {
+  using namespace std::literals;
   Time::Point start = Time::Now();
   while (true)
   {
@@ -46,6 +48,22 @@ bool ExecutionRecorder::waitUnit(size_t recordCount, std::optional<Time::Duratio
       return true;
     if (timeout.has_value() && timeout.value() <= Time::Now() - start)
       return false;
+    std::this_thread::sleep_for(100ms)
   }
 }
 
+std::ostream &operator<<(std::ostream &os, const Record &record)
+{
+  return os << std::format("{}\t{}", record.getId(), record.getDescription());
+}
+
+std::ostream &operator<<(std::ostream &os, const ExecutionRecorder &recorder)
+{
+  for (std::size_t index = 0, count = recorder.getRecordsCount(); index < count; ++index)
+  {
+    auto record = recorder.tryGetRecordAt(index);
+    if (record.has_value())
+      os << record.value();
+  }
+  return os;
+}

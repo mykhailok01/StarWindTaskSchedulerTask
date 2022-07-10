@@ -1,5 +1,6 @@
 #include "TaskScheduler.hpp"
 #include "TimeHelper.hpp"
+#include "ExecutionRecorder.hpp"
 
 #include <iostream>
 #include <functional>
@@ -29,12 +30,14 @@ int main()
 {
   using namespace std::literals;
   TaskScheduler taskScheduler(1);
-  auto taskFuntion = []()
+  ExecutionRecorder executionRecorder;
+  auto taskFuntion = [&executionRecorder]()
   {
-    std::cout << "Start a task\n";
+    executionRecorder.pushBackRecord({ 0, "Start a task\n" });
     WorkFor(5s);
-    std::cout << "Out after 5s\n";
+    executionRecorder.pushBackRecord({ 1, "Task is finished after 5s\n" });
   };
   taskScheduler.addTask(std::make_shared<FunctionTask>(taskFuntion));
-  std::this_thread::sleep_for(10s);
+  executionRecorder.waitUnit(2);
+  std::cout << executionRecorder;
 }
