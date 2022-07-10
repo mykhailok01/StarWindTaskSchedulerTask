@@ -5,13 +5,13 @@
 TaskScheduler::TaskScheduler(int threadsNumber)
   : _workerNumber(static_cast<size_t>(threadsNumber))
 {
-  if (threadsNumber <= 0) 
-    throw std::runtime_error("Task scheduler threads number can't be smalller or equel to zero");
+  if (threadsNumber <= 0)
+    throw std::runtime_error("Task scheduler threads number can't be smaller or equal to zero");
 }
 
 TaskScheduler::~TaskScheduler()
 {
-  if(_workers.size())
+  if (_workers.size())
     stop();
 }
 
@@ -32,7 +32,7 @@ void TaskScheduler::stop()
   for (size_t i = 0; i < _workers.size(); ++i)
     addTask(nullptr);
 
-  for (std::thread& worker : _workers)
+  for (std::thread &worker : _workers)
     worker.join();
   _workers.clear();
 }

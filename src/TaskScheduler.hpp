@@ -32,6 +32,6 @@ private:
   std::vector<std::shared_ptr<Task>> _tasksQueue;
   std::mutex _locker;
   std::condition_variable _conditionVriable;
-  
+
 };
 #endif  // !TASK_SCHEDULER_HPP

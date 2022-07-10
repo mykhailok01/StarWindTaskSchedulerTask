@@ -14,7 +14,7 @@ class FunctionTask : public Task
 {
   std::function<void()> _function;
 public:
-  FunctionTask(std::function<void()> function) 
+  FunctionTask(std::function<void()> function)
   {
     _function = function;
   }
