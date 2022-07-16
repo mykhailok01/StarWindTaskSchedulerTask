@@ -5,9 +5,10 @@
 #include <optional>
 #include <format>
 
-Record::Record(IdType id, const std::string &description) :
+Record::Record(IdType id, const std::string &description, const std::thread::id threadId) :
   _id{ id },
-  _description(description)
+  _description(description),
+  _threadId(threadId)
 {
 }
 
@@ -38,7 +39,7 @@ std::size_t ExecutionRecorder::getRecordsCount() const
   return _records.size();
 }
 
-bool ExecutionRecorder::waitUnit(size_t recordCount, std::optional<Time::Duration> timeout) const
+bool ExecutionRecorder::waitUnit(size_t recordCount, std::optional<Time::UnitType> timeout) const
 {
   using namespace std::literals;
   Time::Point start = Time::Now();
@@ -48,13 +49,13 @@ bool ExecutionRecorder::waitUnit(size_t recordCount, std::optional<Time::Duratio
       return true;
     if (timeout.has_value() && timeout.value() <= Time::Now() - start)
       return false;
-    std::this_thread::sleep_for(100ms)
+    std::this_thread::sleep_for(100ms);
   }
 }
 
 std::ostream &operator<<(std::ostream &os, const Record &record)
 {
-  return os << std::format("{}\t{}", record.getId(), record.getDescription());
+  return os << record.getThreadId() << std::format("\t{}\t{}", record.getId(), record.getDescription());
 }
 
 std::ostream &operator<<(std::ostream &os, const ExecutionRecorder &recorder)

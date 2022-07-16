@@ -5,14 +5,14 @@
 class Time
 {
 public:
-  using Duration = std::chrono::microseconds;
+  using UnitType = std::chrono::milliseconds;
   using Clock = std::chrono::high_resolution_clock;
-  using Point = std::chrono::time_point<Clock, Duration>;
+  using Point = std::chrono::time_point<Clock, UnitType>;
 
 
   static inline Point Now()
   {
-    return std::chrono::time_point_cast<Duration>(Clock::now());
+    return std::chrono::time_point_cast<UnitType>(Clock::now());
   }
 };
 #endif

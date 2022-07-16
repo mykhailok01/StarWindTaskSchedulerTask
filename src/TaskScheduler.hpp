@@ -34,4 +34,4 @@ private:
   std::condition_variable _conditionVriable;
 
 };
-#endif  // !TASK_SCHEDULER_HPP
+#endif
